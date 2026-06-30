@@ -1,0 +1,31 @@
+baseURL = "https://go-ruby-tsort.github.io/"
+title = "go-ruby-tsort"
+disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[[params.phases]]
+  name = "TSort"
+  status = "ready"
+  blurb = "`TSort(nodes, children)` returns the nodes sorted children-first (`a` depends-on `b` → `b` precedes `a`), raising `*Cyclic` on a real cycle (an SCC of size ≥ 2) with MRI's exact `topological sort failed: [...]` message — while a self-loop, being a size-1 SCC, returns normally."
+[[params.phases]]
+  name = "Strongly connected components"
+  status = "ready"
+  blurb = "`StronglyConnectedComponents(nodes, children)` returns Tarjan SCCs in reverse topological order; each component's internal order is its DFS-discovery order, matching MRI byte-for-byte."
+[[params.phases]]
+  name = "Iterator forms"
+  status = "ready"
+  blurb = "`EachStronglyConnectedComponent` and the `…From(start, …)` variant that walks only the subgraph reachable from a start node and never enumerates the full node set — the iterator shapes of `tsort.rb`."
+[[params.phases]]
+  name = "Host identity & inspect"
+  status = "ready"
+  blurb = "`Options.Identity` decides node equality (Ruby's `eql?`/`hash`) so a host like rbgo can plug in boxed Ruby objects; `Options.Inspect` renders nodes for the `Cyclic` message, with a built-in Ruby-style `#inspect` for the numeric tower, strings, `Symbol`, booleans, `nil` and arrays."
+[[params.phases]]
+  name = "Tarjan's algorithm, MRI-exact"
+  status = "ready"
+  blurb = "The whole port follows MRI 4.0.5's `tsort.rb` exactly — component grouping, each component's ordering and the reverse-topological emission order all match, including the quirk that a self-loop does not raise."
+[[params.phases]]
+  name = "Differential oracle & coverage"
+  status = "ready"
+  blurb = "A corpus of fixed and deterministically-random digraphs sorted both here and by the system `ruby` (`TSort.tsort`, `strongly_connected_components`, `each_strongly_connected_component_from`), `TSort::Cyclic` messages included, compared byte-for-byte; 100% coverage, gofmt + go vet clean, green across all six 64-bit Go arches and three OSes."
